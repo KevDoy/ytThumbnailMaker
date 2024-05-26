@@ -25,6 +25,8 @@ body {
   z-index: 10;
 }
 
+
+
 .content-text {
   position: absolute;
   bottom: 295px;
@@ -32,6 +34,12 @@ body {
   padding: 0 80px 80px 80px;
   max-width: 1200px;
   z-index:20;
+}
+
+.content-text:hover {
+  background: #0d6efd;
+  border-radius: 50px;
+  padding-top: 80px;
 }
 #imagebg {
   position: absolute;
@@ -121,12 +129,14 @@ table tr td {
   position: absolute;
 }
 
+
 .smallscale {
   transform: scale(0.3);
   margin-left: -650px;
   margin-top: -380px;
   
 }
+
 
 .exportScale {
   transform: scale(0.8);
