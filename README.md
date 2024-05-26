@@ -1,8 +1,5 @@
 # ytThumbnailMaker
-A self-hosted Video Thumbnail Maker for YouTube to allow small organizations to work faster and more efficiently.
 
-
-## Synopsis
 ![logo](https://raw.githubusercontent.com/KevDoy/ytThumbnailMaker/main/logo.png "YT Thumbnail Maker logo")
 
 YT Thumbnail Maker is a self-hosted Video Thumbnail Maker for YouTube to allow small organizations to work faster and more efficiently. With this tool, you can have your designer create backgrounds once and enable your media team to generate thumbnails faster.
