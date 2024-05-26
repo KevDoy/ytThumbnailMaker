@@ -30,7 +30,7 @@ body {
   bottom: 295px;
   left: 0;
   padding: 0 80px 80px 80px;
-  max-width: 1100px;
+  max-width: 1200px;
   z-index:20;
 }
 #imagebg {
@@ -53,7 +53,7 @@ body {
 .reptitle {
   font-family: 'Poppins', sans-serif;
   font-weight: 700;
-  font-size: 100px;
+  font-size: 85px;
   color: white;
   float: left;
   text-transform: uppercase;
@@ -63,7 +63,7 @@ body {
 
 .dashtitle {
   font-family: 'Aleo', sans-serif;
-  font-size: 100px;
+  font-size: 85px;
   color: white;
   float: left;
   text-transform: capitalize;
