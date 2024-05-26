@@ -1,0 +1,161 @@
+body {
+  width: 100%;
+}
+
+
+.previewarea {
+  min-width: 750px;
+  max-width: 750px;
+  width: auto;
+  height: 450px;
+  margin: 0 auto;
+  margin-top: 70px;
+  overflow: hidden;
+  border-radius: 20px;
+  padding: 30px 50px 50px 65px;
+	box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+}
+
+#content {
+  background: none;
+  color: white;
+  width: 1920px;
+  height: 1080px;
+  position: relative;
+  z-index: 10;
+}
+
+.content-text {
+  position: absolute;
+  bottom: 295px;
+  left: 0;
+  padding: 0 80px 80px 80px;
+  max-width: 1100px;
+  z-index:20;
+}
+#imagebg {
+  position: absolute;
+  z-index: 1;
+  width: 1920px;
+  height: 1080px;
+}
+
+.light {
+  background: #fff !important;
+  color: black !important;
+  width: 2000px;
+  height: 76px !important;
+  border-bottom: 1px solid #bdbdbd !important;
+}
+
+
+
+.reptitle {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 100px;
+  color: white;
+  float: left;
+  text-transform: uppercase;
+  padding-top: 20px;
+  text-shadow: 4px 5px 20px black;
+}
+
+.dashtitle {
+  font-family: 'Aleo', sans-serif;
+  font-size: 100px;
+  color: white;
+  float: left;
+  text-transform: capitalize;
+  padding-top: 24px;
+  font-weight: 400;
+  font-style: italic;
+  text-shadow: 4px 5px 20px black;
+
+}
+
+.light .reptitle,
+.light .dashtitle {
+  color: black !important;
+}
+
+/* button, input, .buttoncustom{
+  font-weight: bold;
+  background: none;
+  border: 2px solid #1976D2;
+  padding: 10px;
+  border-radius: 50px;
+  color: black;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+} */
+
+#download-page-as-image {
+  background: #1976D2;
+  color: #fff;
+}
+
+
+.copyright {
+  text-align: center;
+  color: rgba(0, 0, 0, 0.7);
+  margin-top: 40vh;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.copyright small,
+.copyright small a {
+  text-align: right !important;
+  color: rgba(0, 0, 0, 0.2);
+  text-decoration: none;
+}
+
+table tr td {
+  padding: 0 50px;
+}
+
+#content-container {
+  height: 1080px;
+  width: 1920px;
+  background-size: cover!important;
+  position: absolute;
+}
+
+.smallscale {
+  transform: scale(0.3);
+  margin-left: -650px;
+  margin-top: -380px;
+  
+}
+
+.exportScale {
+  transform: scale(0.8);
+  margin-left: -650px;
+  margin-top: -380px;
+  
+}
+
+.bclogo-float {
+  position: absolute;
+  z-index: 10;
+  bottom: 0;
+  margin: 20px 30px;;
+}
+
+
+.grad-float {
+  position: absolute;
+  z-index: 9;
+  bottom: 0;
+}
+
+#bgSelectorImages img {
+  opacity: 0.8;
+  z-index: 1;
+  height: 85px;
+  cursor: pointer;
+}
+
+#bgSelectorImages img:hover {
+  opacity: 1;
+}
