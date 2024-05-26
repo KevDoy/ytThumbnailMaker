@@ -64,3 +64,61 @@ function replaceText() {
   mainTitleCanvas.innerHTML = mainTitleSelect.value;
   dashtitle.innerHTML = subTitleSelect.value;
 }
+
+
+function youtubeUrlParser(url) {
+  
+  var timeToSec = function(str) {
+    var sec = 0;
+    if (/h/.test(str)) { sec += parseInt(str.match(/(\d+)h/,'$1')[0],10) * 60 * 60; }
+    if (/m/.test(str)) { sec += parseInt(str.match(/(\d+)m/,'$1')[0],10) * 60; }
+    if (/s/.test(str)) { sec += parseInt(str.match(/(\d+)s/,'$1')[0],10); }
+    return sec;
+  };
+  
+  var videoId = /^https?\:\/\/(www\.)?youtu\.be/.test(url) ? url.replace(/^https?\:\/\/(www\.)?youtu\.be\/([\w-]{11}).*/,"$2") : url.replace(/.*\?v\=([\w-]{11}).*/,"$1");
+  var videoStartTime = /[^a-z]t\=/.test(url) ? url.replace(/^.+t\=([\dhms]+).*$/,'$1') : 0;
+  var videoStartSeconds = videoStartTime ? timeToSec(videoStartTime) : 0;
+  var videoShowRelated = ~~/rel\=1/.test(url);
+  
+
+  console.log(videoId);
+  bgImageSwap('https://img.youtube.com/vi/' + videoId +  '/hq720.jpg');
+
+
+  
+}; // youtubeParser();
+
+
+
+$("input").change(function (e) {
+
+  for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
+
+    var file = e.originalEvent.srcElement.files[i];
+
+    var img = $("#content-container");
+    var reader = new FileReader();
+    reader.onloadend = function () {
+      img.attr("style", "background: radial-gradient(circle at left, rgba(19,122,197,0.7) 0%, rgba(255,255,255,0) 100%), url('" + reader.result + "') no-repeat top center");
+
+    }
+    reader.readAsDataURL(file);
+    $("#afterthis").after(img);
+  }
+});
+
+/* Randomize Background */ 
+$(function () {
+  var parent = $("#bgSelectorImages");
+  var divs = parent.children();
+  while (divs.length) {
+    parent.append(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
+  }
+});
+
+
+var img = $("#content-container");
+function bgImageSwap(image) {
+  img.attr("style", "background: url('" + image + "') no-repeat top center");
+}

@@ -159,3 +159,8 @@ table tr td {
 #bgSelectorImages img:hover {
   opacity: 1;
 }
+
+.navbar-toggler-icon {
+  background-image: url('../assets/settingsicon.svg');
+
+}
