@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="css/style2.css">
 </head>
 
-<body>
+<body onload="checkLogoCookie()">
   <nav class="navbar bg-light fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="#"> <img src="assets/ytthmb.svg" style="width: 200px;" alt="YT Thumbnail Maker"></a>
@@ -50,7 +50,8 @@
         </div>
         <div class="mt-5 p-4">
           <h5>Reset Changes</h5>
-          <button class="btn btn-outline-danger" onclick="location.reload();"><img src="assets/reset-danger.svg" alt height="24"> Reset</button>
+          <button class="btn btn-outline-danger" onclick="location.reload();"><img src="assets/reset-danger.svg" alt
+              height="24"> Reset</button>
         </div>
         <div class="pb-4 px-4">
           Powered by <a href="https://github.com/KevDoy/ytThumbnailMaker">YT Thumbnail Maker</a> v1.0
@@ -82,12 +83,12 @@
           <p class="text-center">
             Preview
           </p>
-          <div id="content" class="smallscale" data-bs-toggle="modal"
-          data-bs-target="#backgroundSelect">
+          <div id="content" class="smallscale" data-bs-toggle="modal" data-bs-target="#backgroundSelect">
             <div id="afterthis"></div>
             <div id="content-container"
-              style="background: radial-gradient(circle at left, rgba(19,122,197,0.7) 0%, rgba(255,255,255,0) 100%), url('background-default.jpg');" >
-              <div class="content-text" data-bs-toggle="modal" data-bs-target="#textSelect"><span class="reptitle" id="reptitle">Main Title</span>
+              style="background: radial-gradient(circle at left, rgba(19,122,197,0.7) 0%, rgba(255,255,255,0) 100%), url('background-default.jpg');">
+              <div class="content-text" data-bs-toggle="modal" data-bs-target="#textSelect"><span class="reptitle"
+                  id="reptitle">Main Title</span>
                 <br>
                 <span class="dashtitle" id="dashtitle">Subtitle</span>
               </div>
@@ -104,15 +105,18 @@
     <div class="row mt-4 text-center" style="max-width: 800px; margin: 0 auto; padding-left: 20px;">
       <div class="col-4">
         <button onclick="$('#bgSelector').show();" class="btn btn-outline-primary" data-bs-toggle="modal"
-          data-bs-target="#backgroundSelect"><img src="assets/image-blue.svg" alt height="24"> Select Background</button>
+          data-bs-target="#backgroundSelect"><img src="assets/image-blue.svg" alt height="24"> Select
+          Background</button>
       </div>
       <div class="col-4">
-        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#textSelect"><img src="assets/edit-blue.svg" alt height="24">
+        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#textSelect"><img
+            src="assets/edit-blue.svg" alt height="24">
           Customize
           text</button>
       </div>
       <div class="col-4">
-        <button class="btn btn-primary" id="download-page-as-image"><img src="assets/download-white.svg" alt height="24"> Save Thumbnail</button>
+        <button class="btn btn-primary" id="download-page-as-image"><img src="assets/download-white.svg" alt
+            height="24"> Save Thumbnail</button>
       </div>
     </div>
   </div>
@@ -190,7 +194,7 @@
           </div>
           <br><br>
           <h4 style="font-family: 'Poppins', sans-serif; font-size: 16px">Using a custom background?</h4>
-          <input id="files" type="file">
+          <input id="files" type="file" class="btn btn-outline-primary">
 
           <br><br><br>
           <h4 style="font-family: 'Poppins', sans-serif; font-size: 16px">Existing YouTube Thumbnail</h4>
@@ -235,6 +239,7 @@
 
   <script src="scripts/script.js"></script>
 
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
 
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"

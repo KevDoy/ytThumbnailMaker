@@ -49,9 +49,22 @@ function showLogo() {
   // If the checkbox is checked, display the output text
   if (checkBox.checked == true){
     canvaslogov.style.display = "block";
+    Cookies.set('logo', '1');
   } else {
     canvaslogov.style.display = "none";
+    Cookies.set('logo', '0');
   }
+}
+
+function checkLogoCookie() {
+  var cookieValue = Cookies.get('logo');
+  var canvaslogov = document.getElementById("canvasLogo");
+  if (cookieValue == 0) {
+    document.getElementById("logoCheckbox").checked = false;
+    canvaslogov.style.display = "none";
+  } else {
+    document.getElementById("logoCheckbox").checked = true;
+  };
 }
 
 function replaceText() {
@@ -122,3 +135,5 @@ var img = $("#content-container");
 function bgImageSwap(image) {
   img.attr("style", "background: url('" + image + "') no-repeat top center");
 }
+
+
