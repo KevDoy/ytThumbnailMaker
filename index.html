@@ -19,6 +19,23 @@
 </head>
 
 <body onload="checkLogoCookie()">
+  <div id="loadingOverlay" class="loading-overlay">
+    <div class="spinner-container">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="mt-2">Loading backgrounds...</p>
+    </div>
+  </div>
+  <div id="saveOverlay" class="loading-overlay" style="display: none;">
+    <div class="spinner-container">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Generating thumbnail...</span>
+      </div>
+      <p class="mt-2">Preparing your thumbnail...</p>
+    </div>
+  </div>
+
   <nav class="navbar bg-light fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="#"> <img src="assets/ytthmb.svg" style="width: 200px;" alt="YT Thumbnail Maker"></a>
@@ -38,13 +55,14 @@
             <li class="nav-item">
               <h5>Settings</h5>
             </li>
-            <li class="nav-item">
-              <label for="logoCheckbox">Show Logo:</label>
-              <input type="checkbox" id="logoCheckbox" onclick="showLogo()" checked>
-            </li>
             <li class="nav-item mt-4">
               <h5>Help</h5>
-
+              <ol class="ps-4">
+                <li>Choose a background from presets, upload your own, or import from a YouTube URL</li>
+                <li>Add your title and subtitle text in the text fields</li>
+                <li>Toggle your logo on/off as needed</li>
+                <li>Click "Save Thumbnail" to download your thumbnail as a JPG</li>
+              </ol>
             </li>
           </ul>
 
@@ -55,15 +73,15 @@
               height="24"> Reset</button>
         </div>
         <div class="pb-4 px-4">
-          Powered by <a href="https://github.com/KevDoy/ytThumbnailMaker">YT Thumbnail Maker</a> v1.1
+          Powered by <a href="https://github.com/KevDoy/ytThumbnailMaker">YT Thumbnail Maker</a> v1.2
           <br>
-          <small>© 2024 YT Thumbnail Maker. All Rights Reserved.</small>
+          <small>© 2025 YT Thumbnail Maker. All Rights Reserved.</small>
         </div>
       </div>
     </div>
   </nav>
 
-  <div class="container d-lg-none mt-4">
+  <!-- <div class="container d-none mt-4">
     <div class="row">
       <div style="padding: 0 15px">
         <h3 class="mt-5">Incompatible</h3>
@@ -76,20 +94,22 @@
         <small>The minimum screen/window width required is 1000px.</small>
       </div>
     </div>
-  </div>
-  <div class="container d-none d-lg-block">
-    <div class="row">
-      <div class="col-12">
+  </div> -->
+  <div class="container-fluid ">
+    <div class="row g-4">
+      <!-- Preview Column -->
+      <div class="col-lg-8 col-xl-9">
         <div id="previewarea" class="previewarea bg-light">
-          <p class="text-center">
-            Preview
-          </p>
-          <div id="content" class="smallscale" data-bs-toggle="modal" data-bs-target="#backgroundSelect">
+          <div class="preview-header d-flex justify-content-between align-items-center p-2">
+            <h5 class="m-0">Preview</h5>
+          </div>
+          <!-- Existing preview content -->
+          <div id="content" class="smallscale">
             <div id="afterthis"></div>
             <div id="content-container"
               style="background: radial-gradient(circle at left, rgba(19,122,197,0.7) 0%, rgba(255,255,255,0) 100%), url('background-default.jpg');">
-              <div class="content-text" data-bs-toggle="modal" data-bs-target="#textSelect"><span class="reptitle"
-                  id="reptitle">Main Title</span>
+              <div class="content-text">
+                <span class="reptitle" id="reptitle">Main Title</span>
                 <br>
                 <span class="dashtitle" id="dashtitle">Subtitle</span>
               </div>
@@ -99,29 +119,73 @@
               style="width:1920px; height:1080px; background: radial-gradient(circle at left, rgba(22,80,137,0.8) 0%, rgba(0,0,0,0) 50%, rgba(0, 0, 0,0) 100%); mix-blend-mode: normal;">
             </div>
           </div>
-          <br>
+        </div>
+      </div>
+
+      <!-- Controls Column -->
+      <div class="col-lg-4 col-xl-3 mt-5">
+        <div class="card pt-5">
+          <div class="card-body">
+            <h5 class="card-title mt-5">Create Your Thumbnail</h5>
+
+            <!-- Step 1: Background -->
+            <div class="step-section mb-4">
+              <h6 class="step-title">
+                <span class="badge bg-primary me-2">1</span>
+                Choose Background
+              </h6>
+              <div class="d-grid gap-2">
+                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#backgroundSelect">
+                  <img src="assets/image-blue.svg" alt height="24"> Select Background
+                </button>
+                <!-- <input id="files" type="file" class="form-control" accept="image/*">
+                <div class="input-group">
+                  <input type="text" class="form-control" placeholder="YouTube URL" id="ytURLImport">
+                  <button class="btn btn-outline-primary" onclick="youtubeUrlParser(document.getElementById('ytURLImport').value)">
+                    Import
+                  </button> -->
+                </div>
+              </div>
+            </div>
+
+            <!-- Step 2: Text -->
+            <div class="step-section mb-4">
+              <h6 class="step-title">
+                <span class="badge bg-primary me-2">2</span>
+                Add Text
+              </h6>
+              <div class="mb-3">
+                <label for="mainTitleSelect" class="form-label">Main Title</label>
+                <input id="mainTitleSelect" class="form-control" placeholder="Main Title" oninput="replaceText()">
+              </div>
+              <div class="mb-3">
+                <label for="subTitleSelect" class="form-label">Subtitle</label>
+                <input id="subTitleSelect" class="form-control" placeholder="Subtitle" oninput="replaceText()">
+              </div>
+            </div>
+
+            <!-- Step 3: Logo -->
+            <div class="step-section">
+              <h6 class="step-title">
+                <span class="badge bg-primary me-2">3</span>
+                Logo Options
+              </h6>
+              <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="mainLogoCheckbox" onclick="showLogo()" checked>
+                <label class="form-check-label" for="mainLogoCheckbox">Show Logo</label>
+              </div>
+            </div>
+
+            <!-- Save Button -->
+            <div class="d-grid gap-2 mt-4">
+              <button class="btn btn-primary btn-lg" id="download-page-as-image">
+                <img src="assets/download-white.svg" alt height="24"> Save Thumbnail
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="row mt-4 text-center" style="max-width: 800px; margin: 0 auto; padding-left: 20px;">
-      <div class="col-4">
-        <button onclick="$('#bgSelector').show();" class="btn btn-outline-primary" data-bs-toggle="modal"
-          data-bs-target="#backgroundSelect"><img src="assets/image-blue.svg" alt height="24"> Select
-          Background</button>
-      </div>
-      <div class="col-4">
-        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#textSelect"><img
-            src="assets/edit-blue.svg" alt height="24">
-          Customize
-          text</button>
-      </div>
-      <div class="col-4">
-        <button class="btn btn-primary" id="download-page-as-image"><img src="assets/download-white.svg" alt
-            height="24"> Save Thumbnail</button>
-      </div>
-    </div>
-  </div>
-
   </div>
 
 
@@ -171,56 +235,7 @@
         <div class="modal-body">
           <h4 style="font-family: 'Poppins', sans-serif; font-size: 16px">Premade Backgrounds</h4>
           <div id="bgSelectorImages">
-            <img src="backgrounds/1.jpg" onclick="bgImageSwap('backgrounds/1.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/2.jpg" onclick="bgImageSwap('backgrounds/2.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/3.jpg" onclick="bgImageSwap('backgrounds/3.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/4.jpg" onclick="bgImageSwap('backgrounds/4.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/5.jpg" onclick="bgImageSwap('backgrounds/5.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/6.jpg" onclick="bgImageSwap('backgrounds/6.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/7.jpg" onclick="bgImageSwap('backgrounds/7.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/8.jpg" onclick="bgImageSwap('backgrounds/8.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/9.jpg" onclick="bgImageSwap('backgrounds/9.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/10.jpg" onclick="bgImageSwap('backgrounds/10.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/11.jpg" onclick="bgImageSwap('backgrounds/11.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/12.jpg" onclick="bgImageSwap('backgrounds/12.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/13.jpg" onclick="bgImageSwap('backgrounds/13.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/14.jpg" onclick="bgImageSwap('backgrounds/14.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/15.jpg" onclick="bgImageSwap('backgrounds/15.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/16.jpg" onclick="bgImageSwap('backgrounds/16.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/17.jpg" onclick="bgImageSwap('backgrounds/17.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/18.jpg" onclick="bgImageSwap('backgrounds/18.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/19.jpg" onclick="bgImageSwap('backgrounds/19.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/20.jpg" onclick="bgImageSwap('backgrounds/20.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/21.jpg" onclick="bgImageSwap('backgrounds/21.jpg')" data-bs-dismiss="modal">
-
-            <!-- Additional Backgrounds -->
-            <!--
-            <img src="backgrounds/22.jpg" onclick="bgImageSwap('backgrounds/22.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/23.jpg" onclick="bgImageSwap('backgrounds/23.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/24.jpg" onclick="bgImageSwap('backgrounds/24.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/25.jpg" onclick="bgImageSwap('backgrounds/25.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/26.jpg" onclick="bgImageSwap('backgrounds/26.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/27.jpg" onclick="bgImageSwap('backgrounds/27.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/28.jpg" onclick="bgImageSwap('backgrounds/28.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/29.jpg" onclick="bgImageSwap('backgrounds/29.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/30.jpg" onclick="bgImageSwap('backgrounds/30.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/31.jpg" onclick="bgImageSwap('backgrounds/31.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/32.jpg" onclick="bgImageSwap('backgrounds/32.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/33.jpg" onclick="bgImageSwap('backgrounds/33.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/34.jpg" onclick="bgImageSwap('backgrounds/34.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/35.jpg" onclick="bgImageSwap('backgrounds/35.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/36.jpg" onclick="bgImageSwap('backgrounds/36.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/37.jpg" onclick="bgImageSwap('backgrounds/37.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/38.jpg" onclick="bgImageSwap('backgrounds/38.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/39.jpg" onclick="bgImageSwap('backgrounds/39.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/40.jpg" onclick="bgImageSwap('backgrounds/40.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/41.jpg" onclick="bgImageSwap('backgrounds/41.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/42.jpg" onclick="bgImageSwap('backgrounds/42.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/43.jpg" onclick="bgImageSwap('backgrounds/43.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/44.jpg" onclick="bgImageSwap('backgrounds/44.jpg')" data-bs-dismiss="modal">
-            <img src="backgrounds/45.jpg" onclick="bgImageSwap('backgrounds/45.jpg')" data-bs-dismiss="modal">
-            -->
-
+            <!-- Background images will be dynamically loaded here -->
           </div>
           <br><br>
           <h4 style="font-family: 'Poppins', sans-serif; font-size: 16px">Using a custom background?</h4>
@@ -239,31 +254,6 @@
     </div>
   </div>
 
-  <!-- Modal -->
-  <div class="modal fade" id="textSelect" tabindex="-1" aria-labelledby="textSelectLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="textSelectLabel">Customize Text</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <label for="mainTitleSelect">Main Title</label>
-          <input id="mainTitleSelect" class="form-control" placeholder="Main Title">
-          <div class="form-text">What is the Main or Series Title?</div>
-          <br>
-          <label for="subTitleSelect">Subtitle</label>
-          <input id="subTitleSelect" class="form-control" placeholder="Subtitle">
-          <div class="form-text">Example: Part 1, Part 2, etc...</div>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" data-bs-dismiss="modal" onclick="replaceText()">Save</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
 
   </div>
 
@@ -275,6 +265,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
+  <script type="module" src="scripts/backgroundLoader.js"></script>
 </body>
 
 </html>

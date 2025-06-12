@@ -6,14 +6,48 @@ setUpDownloadPageAsImage();
 
 function setUpDownloadPageAsImage() {
   document.getElementById("download-page-as-image").addEventListener("click", function() {
-    $("#content").removeClass("smallscale");
-    $("#content").addClass("exportScale");
-    html2canvas(document.getElementById("content")).then(function(canvas) {
-      console.log(canvas);
-      simulateDownloadImageClick(canvas.toDataURL(), 'YtThumbnail.png');
+    const content = document.getElementById("content");
+    const saveOverlay = document.getElementById("saveOverlay");
+    
+    // Show loading overlay
+    saveOverlay.style.display = 'flex';
+    
+    // Temporarily remove scaling but maintain position
+    content.classList.remove("smallscale");
+    
+    html2canvas(content, {
+      width: 1920,
+      height: 1080,
+      scale: 1,
+      useCORS: true,
+      allowTaint: true,
+      onclone: function(clonedDoc) {
+        const clonedContent = clonedDoc.getElementById("content");
+        clonedContent.style.transform = 'none';
+        clonedContent.style.width = '1920px';
+        clonedContent.style.height = '1080px';
+      }
+    }).then(function(canvas) {
+      // Force the canvas to be 1920x1080
+      const finalCanvas = document.createElement('canvas');
+      finalCanvas.width = 1920;
+      finalCanvas.height = 1080;
+      const ctx = finalCanvas.getContext('2d');
+      ctx.drawImage(canvas, 0, 0, 1920, 1080);
+      
+      // Changed to JPG with 0.9 quality for file size optimization
+      simulateDownloadImageClick(finalCanvas.toDataURL('image/jpeg', 0.9), 'YtThumbnail.jpg');
+      
+      // Restore original scale
+      content.classList.add("smallscale");
+      
+      // Hide loading overlay
+      saveOverlay.style.display = 'none';
+    }).catch(function(error) {
+      console.error('Error generating thumbnail:', error);
+      saveOverlay.style.display = 'none';
+      alert('There was an error generating your thumbnail. Please try again.');
     });
-    $("#content").removeClass("exportScale");
-    $("#content").addClass("smallscale");
   });
 }
 
@@ -41,41 +75,38 @@ function accountForFirefox(click) { // wrapper function
 
 
 function showLogo() {
-  // Get the checkbox
-  var checkBox = document.getElementById("logoCheckbox");
-  // Get the output text
-  var canvaslogov = document.getElementById("canvasLogo");
-
-  // If the checkbox is checked, display the output text
-  if (checkBox.checked == true){
-    canvaslogov.style.display = "block";
-    Cookies.set('logo', '1');
-  } else {
-    canvaslogov.style.display = "none";
-    Cookies.set('logo', '0');
-  }
+    const logo = document.getElementById('canvasLogo');
+    const checkbox = document.getElementById('mainLogoCheckbox');
+    
+    if (checkbox.checked) {
+        logo.style.display = 'block';
+        Cookies.set('logoVisible', 'true', { expires: 7 });
+    } else {
+        logo.style.display = 'none';
+        Cookies.set('logoVisible', 'false', { expires: 7 });
+    }
 }
 
 function checkLogoCookie() {
-  var cookieValue = Cookies.get('logo');
-  var canvaslogov = document.getElementById("canvasLogo");
-  if (cookieValue == 0) {
-    document.getElementById("logoCheckbox").checked = false;
-    canvaslogov.style.display = "none";
-  } else {
-    document.getElementById("logoCheckbox").checked = true;
-  };
+    const logoVisible = Cookies.get('logoVisible');
+    const checkbox = document.getElementById('mainLogoCheckbox');
+    const logo = document.getElementById('canvasLogo');
+    
+    if (logoVisible === 'false') {
+        checkbox.checked = false;
+        logo.style.display = 'none';
+    } else {
+        checkbox.checked = true;
+        logo.style.display = 'block';
+    }
 }
 
 function replaceText() {
-  var mainTitleValue = document.getElementById('mainTitleSelect');
-  var subTitleValue = document.getElementById('subTitleSelect');
-  var mainTitleCanvas = document.getElementById('reptitle');
-  var subTitleCanvas = document.getElementById('dashtitle');
-
-  
-  mainTitleCanvas.innerHTML = mainTitleSelect.value;
-  dashtitle.innerHTML = subTitleSelect.value;
+    const mainTitle = document.getElementById('mainTitleSelect').value;
+    const subTitle = document.getElementById('subTitleSelect').value;
+    
+    document.getElementById('reptitle').textContent = mainTitle || 'Main Title';
+    document.getElementById('dashtitle').textContent = subTitle || 'Subtitle';
 }
 
 
@@ -118,15 +149,6 @@ $("input").change(function (e) {
     }
     reader.readAsDataURL(file);
     $("#afterthis").after(img);
-  }
-});
-
-/* Randomize Background */ 
-$(function () {
-  var parent = $("#bgSelectorImages");
-  var divs = parent.children();
-  while (divs.length) {
-    parent.append(divs.splice(Math.floor(Math.random() * divs.length), 1)[0]);
   }
 });
 
