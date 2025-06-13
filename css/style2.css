@@ -7,12 +7,12 @@ body {
   min-width: auto;
   max-width: 100%;
   width: 100%;
-  height: auto;
-  margin: 85px 0 0 0;
+  height: 545px;
   padding: 20px;
   overflow: visible;
   background: #f8f9fa;
   border: 1px solid #dee2e6;
+  border-radius: .375rem;
 }
 
 #content {
