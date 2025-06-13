@@ -1,6 +1,6 @@
-# YT Thumbnail Maker
+![logo](https://raw.githubusercontent.com/KevDoy/ytThumbnailMaker/refs/heads/main/logo.png "YT Thumbnail Maker logo")
 
-![logo](https://raw.githubusercontent.com/KevDoy/ytThumbnailMaker/main/logo.png "YT Thumbnail Maker logo")
+# YT Thumbnail Maker
 
 A self-hosted thumbnail generator for YouTube videos. Designed to help organizations such as churches create consistent, branded thumbnails quickly and efficiently.
 
