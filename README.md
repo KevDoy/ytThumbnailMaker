@@ -9,7 +9,7 @@ A self-hosted thumbnail generator for YouTube videos. Designed to help organizat
 ## Features
 - Simple, intuitive interface
 - Preset background templates
-- Custom text positioning
+- Custom text
 - Logo toggle option
 - Exports as JPG (under 2MB for YouTube requirements)
 - No server-side code required
