@@ -158,4 +158,42 @@ function bgImageSwap(image) {
   img.attr("style", "background: url('" + image + "') no-repeat top center");
 }
 
+function initializeThemeColor() {
+    const colorPicker = document.getElementById('themeColorPicker');
+    const savedColor = Cookies.get('themeColor') || '#137AC5';
+    
+    // Set initial color
+    colorPicker.value = savedColor;
+    updateGradientColor(savedColor);
+    
+    // Handle color changes
+    colorPicker.addEventListener('change', function(e) {
+        const newColor = e.target.value;
+        Cookies.set('themeColor', newColor, { expires: 7 });
+        updateGradientColor(newColor);
+    });
+}
+
+function updateGradientColor(color) {
+    const container = document.getElementById('content-container');
+    const gradientOverlay = document.querySelector('.grad-float');
+    
+    // Convert hex to rgba
+    const r = parseInt(color.substr(1,2), 16);
+    const g = parseInt(color.substr(3,2), 16);
+    const b = parseInt(color.substr(5,2), 16);
+    
+    // Update main gradient
+    container.style.background = `radial-gradient(circle at left, rgba(${r},${g},${b},0.7) 0%, rgba(255,255,255,0) 100%), url('${container.style.backgroundImage.split('url(')[1].split(')')[0]}')`;
+    
+    // Update overlay gradient
+    gradientOverlay.style.background = `radial-gradient(circle at left, rgba(${Math.floor(r*0.7)},${Math.floor(g*0.7)},${Math.floor(b*0.7)},0.8) 0%, rgba(0,0,0,0) 50%, rgba(0, 0, 0,0) 100%)`;
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    initializeThemeColor();
+    // ...existing code...
+});
+
 
