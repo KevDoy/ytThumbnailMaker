@@ -1,4 +1,4 @@
-![logo](https://raw.githubusercontent.com/KevDoy/ytThumbnailMaker/refs/heads/main/logo.png "YT Thumbnail Maker logo")
+<img src="https://raw.githubusercontent.com/KevDoy/ytThumbnailMaker/refs/heads/main/favicon.png" height="70" alt>
 
 # YT Thumbnail Maker
 
