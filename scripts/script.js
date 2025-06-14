@@ -160,34 +160,46 @@ function bgImageSwap(image) {
 
 function initializeThemeColor() {
     const colorPicker = document.getElementById('themeColorPicker');
+    const gradientToggle = document.getElementById('showGradientToggle');
     const savedColor = Cookies.get('themeColor') || '#137AC5';
+    const showGradient = Cookies.get('showGradient') !== 'false';
     
-    // Set initial color
+    // Set initial states
     colorPicker.value = savedColor;
-    updateGradientColor(savedColor);
+    gradientToggle.checked = showGradient;
+    updateGradientColor(savedColor, showGradient);
     
     // Handle color changes
     colorPicker.addEventListener('change', function(e) {
         const newColor = e.target.value;
         Cookies.set('themeColor', newColor, { expires: 7 });
-        updateGradientColor(newColor);
+        updateGradientColor(newColor, gradientToggle.checked);
+    });
+    
+    // Handle gradient toggle
+    gradientToggle.addEventListener('change', function() {
+        Cookies.set('showGradient', this.checked, { expires: 7 });
+        updateGradientColor(colorPicker.value, this.checked);
     });
 }
 
-function updateGradientColor(color) {
+function updateGradientColor(color, showGradient) {
     const container = document.getElementById('content-container');
     const gradientOverlay = document.querySelector('.grad-float');
+    const currentBg = container.style.backgroundImage.split('url(')[1].split(')')[0];
     
     // Convert hex to rgba
     const r = parseInt(color.substr(1,2), 16);
     const g = parseInt(color.substr(3,2), 16);
     const b = parseInt(color.substr(5,2), 16);
     
-    // Update main gradient
-    container.style.background = `radial-gradient(circle at left, rgba(${r},${g},${b},0.7) 0%, rgba(255,255,255,0) 100%), url('${container.style.backgroundImage.split('url(')[1].split(')')[0]}')`;
-    
-    // Update overlay gradient
-    gradientOverlay.style.background = `radial-gradient(circle at left, rgba(${Math.floor(r*0.7)},${Math.floor(g*0.7)},${Math.floor(b*0.7)},0.8) 0%, rgba(0,0,0,0) 50%, rgba(0, 0, 0,0) 100%)`;
+    if (showGradient) {
+        container.style.background = `radial-gradient(circle at left, rgba(${r},${g},${b},0.7) 0%, rgba(255,255,255,0) 100%), url(${currentBg})`;
+        gradientOverlay.style.background = `radial-gradient(circle at left, rgba(${Math.floor(r*0.7)},${Math.floor(g*0.7)},${Math.floor(b*0.7)},0.8) 0%, rgba(0,0,0,0) 50%, rgba(0, 0, 0,0) 100%)`;
+    } else {
+        container.style.background = `url(${currentBg})`;
+        gradientOverlay.style.background = 'none';
+    }
 }
 
 // Initialize when DOM is ready

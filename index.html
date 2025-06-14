@@ -54,13 +54,19 @@
           <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li class="nav-item">
               <h5>Settings</h5>
+              <!-- Existing toggles -->
               <div class="form-check form-switch ms-3">
                 <input class="form-check-input" type="checkbox" id="randomizeToggle" checked>
-                <label class="form-check-label" for="randomizeToggle">Randomize Background Order</label>
+                <label class="form-check-label" for="randomizeToggle">Randomize Backgrounds</label>
               </div>
-              <div class="mt-3 ms-3">
-                <label for="themeColorPicker" class="form-label">Theme Color</label>
-                <input type="color" class="form-control form-control-color" id="themeColorPicker" value="#137AC5" title="Choose theme color">
+              <!--background color toggle -->
+              <div class="form-check form-switch ms-3 mt-2">
+                <input class="form-check-input" type="checkbox" id="showGradientToggle" checked>
+                <label class="form-check-label" for="showGradientToggle">Show Color Gradient</label>
+              </div>
+                <div class="form-check ms-3 mt-2 d-flex align-items-center">
+                <input type="color" class="form-control-sm me-2" id="themeColorPicker" value="#137AC5">
+                <label class="form-label mb-0" for="themeColorPicker">Theme Color</label>
               </div>
             </li>
             <li class="nav-item mt-4">
