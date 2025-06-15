@@ -260,11 +260,11 @@ function updateGradientColor(color, showGradient) {
     const b = parseInt(color.substr(5,2), 16);
     
     if (showGradient) {
-        // Use container gradient for the background + gradient combo - limit to half width
-        container.style.background = `radial-gradient(circle at left, rgba(${r},${g},${b},0.7) 0%, rgba(255,255,255,0) 50%), ${currentBg}`;
-        // Also use overlay gradient for additional depth - limit to half width
+        // Use container gradient for the background + gradient combo - limit to half width with reduced opacity
+        container.style.background = `radial-gradient(circle at left, rgba(${r},${g},${b},0.5) 0%, rgba(255,255,255,0) 50%), ${currentBg}`;
+        // Also use overlay gradient for additional depth - limit to half width with reduced opacity
         if (gradientOverlay) {
-            gradientOverlay.style.background = `radial-gradient(circle at left, rgba(${Math.floor(r*0.7)},${Math.floor(g*0.7)},${Math.floor(b*0.7)},0.8) 0%, rgba(0,0,0,0) 25%, rgba(0, 0, 0,0) 50%)`;
+            gradientOverlay.style.background = `radial-gradient(circle at left, rgba(${Math.floor(r*0.7)},${Math.floor(g*0.7)},${Math.floor(b*0.7)},0.6) 0%, rgba(0,0,0,0) 25%, rgba(0, 0, 0,0) 50%)`;
         }
     } else {
         // Clear both gradients when disabled
@@ -314,6 +314,20 @@ document.addEventListener('keydown', function(e) {
 function handleAccessibleError(message) {
   announceToScreenReader(message);
   console.error(message);
+}
+
+// Reset function to set all cookies to default values
+function resetApplication() {
+  console.log('resetApplication function called!');
+  // Set all cookies to their default values
+  Cookies.set('logoVisible', 'true', { expires: 7 });
+  Cookies.set('themeColor', '#137AC5', { expires: 7 });
+  Cookies.set('showGradient', 'true', { expires: 7 });
+  Cookies.set('randomizeBackgrounds', 'true', { expires: 7 });
+  console.log('Cookies set to defaults');
+  
+  // Refresh the page to apply the default settings
+  location.reload();
 }
 
 // Initialize when DOM is ready

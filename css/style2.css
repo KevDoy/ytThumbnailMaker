@@ -253,3 +253,12 @@ table tr td {
   margin: 20px 30px;
   display: block;
 }
+
+/* Gradient overlay styling */
+.grad-float {
+  position: absolute;
+  z-index: 5;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
