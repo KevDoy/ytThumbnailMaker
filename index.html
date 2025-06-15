@@ -16,9 +16,18 @@
   <script src="scripts/jquery-3.7.1.min.js"></script>
   <link rel="stylesheet" href="css/style2.css">
   <link rel="stylesheet" href="css/custom.css">
+  <link rel="stylesheet" href="css/accessibility.css">
+
+  <!-- Meta tags for accessibility -->
+  <meta name="description" content="Create custom YouTube thumbnails with our easy-to-use thumbnail maker. Add text, choose backgrounds, and download high-quality JPG images.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#137AC5">
 </head>
 
 <body onload="checkLogoCookie()">
+  <!-- Skip navigation for accessibility -->
+  <a class="sr-only sr-only-focusable" href="#main-content">Skip to main content</a>
+
   <div id="loadingOverlay" class="loading-overlay">
     <div class="spinner-container">
       <div class="spinner-border text-primary" role="status">
@@ -36,49 +45,68 @@
     </div>
   </div>
 
-  <nav class="navbar bg-light fixed-top">
+  <nav class="navbar bg-light fixed-top" role="navigation" aria-label="Main navigation">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#"> <img src="assets/ytthmb.svg" style="width: 200px;" alt="YT Thumbnail Maker"></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-        aria-controls="offcanvasNavbar">
-        <span class="navbar-toggler-icon"></span>
+      <a class="navbar-brand" href="#" aria-label="YT Thumbnail Maker Home">
+        <img src="assets/ytthmb.svg" style="width: 200px;" alt="YT Thumbnail Maker Logo">
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" 
+              data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar"
+              aria-expanded="false" aria-label="Open settings menu">
+        <img src="assets/settingsicon.svg" alt="" height="24" aria-hidden="true">
       </button>
-      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" 
+           aria-labelledby="offcanvasNavbarLabel" role="dialog">
         <div class="offcanvas-header">
-          <h5 class="offcanvas-title" id="offcanvasNavbarLabel">
-            <img src="favicon.png" style="width: 100px;">
-          </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          <h2 class="offcanvas-title" id="offcanvasNavbarLabel">Settings and Help</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" 
+                  aria-label="Close settings menu"></button>
         </div>
         <div class="offcanvas-body">
-          <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-            <li class="nav-item">
-              <h5>Settings</h5>
-              <!-- Existing toggles -->
-              <div class="form-check form-switch ms-3">
-                <input class="form-check-input" type="checkbox" id="randomizeToggle" checked>
-                <label class="form-check-label" for="randomizeToggle">Randomize Backgrounds</label>
-              </div>
-              <!--background color toggle -->
-              <div class="form-check form-switch ms-3 mt-2">
-                <input class="form-check-input" type="checkbox" id="showGradientToggle" checked>
-                <label class="form-check-label" for="showGradientToggle">Show Color Gradient</label>
-              </div>
+          <nav aria-label="Settings and help">
+            <section aria-labelledby="settings-heading">
+              <h3 id="settings-heading">Settings</h3>
+              <fieldset class="border-0 p-0">
+                <legend class="sr-only">Application settings</legend>
+                <!-- Existing toggles -->
+                <div class="form-check form-switch ms-3">
+                  <input class="form-check-input" type="checkbox" id="randomizeToggle" checked 
+                         aria-describedby="randomize-help">
+                  <label class="form-check-label" for="randomizeToggle">Randomize Backgrounds</label>
+                  <div id="randomize-help" class="form-text small">Shuffle background images in random order</div>
+                </div>
+                <!--background color toggle -->
+                <div class="form-check form-switch ms-3 mt-2">
+                  <input class="form-check-input" type="checkbox" id="showGradientToggle" checked 
+                         aria-describedby="gradient-help">
+                  <label class="form-check-label" for="showGradientToggle">Show Color Gradient</label>
+                  <div id="gradient-help" class="form-text small">Apply color gradient overlay to background</div>
+                </div>
                 <div class="form-check ms-3 mt-2 d-flex align-items-center">
-                <input type="color" class="form-control-sm me-2" id="themeColorPicker" value="#137AC5">
-                <label class="form-label mb-0" for="themeColorPicker">Theme Color</label>
-              </div>
-            </li>
-            <li class="nav-item mt-4">
-              <h5>Help</h5>
+                  <input type="color" class="form-control-sm me-2" id="themeColorPicker" value="#137AC5"
+                         aria-describedby="color-help">
+                  <label class="form-label mb-0" for="themeColorPicker">Theme Color</label>
+                  <div id="color-help" class="form-text small">Choose the primary color for gradients and overlays</div>
+                </div>
+                <!-- Logo Options -->
+                <div class="form-check form-switch ms-3 mt-2">
+                  <input class="form-check-input" type="checkbox" id="mainLogoCheckbox" onclick="showLogo()" checked 
+                         aria-describedby="logo-help">
+                  <label class="form-check-label" for="mainLogoCheckbox">Show Logo</label>
+                  <div id="logo-help" class="form-text small">Toggle logo visibility on thumbnail</div>
+                </div>
+              </fieldset>
+            </section>
+            <section aria-labelledby="help-heading" class="mt-4">
+              <h3 id="help-heading">Help</h3>
               <ol class="ps-4">
                 <li>Choose a background from presets, upload your own, or import from a YouTube URL</li>
                 <li>Add your title and subtitle text in the text fields</li>
                 <li>Toggle your logo on/off as needed</li>
                 <li>Click "Save Thumbnail" to download your thumbnail as a JPG</li>
               </ol>
-            </li>
-          </ul>
+            </section>
+          </nav>
 
         </div>
         <div class="mt-5 p-4">
@@ -87,7 +115,7 @@
               height="24"> Reset</button>
         </div>
         <div class="pb-4 px-4">
-          Powered by <a href="https://github.com/KevDoy/ytThumbnailMaker">YT Thumbnail Maker</a> v1.7
+          Powered by <a href="https://github.com/KevDoy/ytThumbnailMaker">YT Thumbnail Maker</a> v1.8
           <br>
           <small>© 2025 YT Thumbnail Maker. All Rights Reserved.</small>
         </div>
@@ -109,98 +137,6 @@
       </div>
     </div>
   </div> -->
-  <div class="container-fluid mt-5">
-    <div class="row g-4 mt-5">
-      <!-- Preview Column -->
-      <div class="col-lg-8 col-xl-9">
-        <div id="previewarea" class="previewarea bg-light">
-          <div class="preview-header d-flex justify-content-between align-items-center p-2">
-            <h5 class="m-0">Preview</h5>
-          </div>
-          <!-- Existing preview content -->
-          <div id="content" class="smallscale">
-            <div id="afterthis"></div>
-            <div id="content-container"
-              style="background: radial-gradient(circle at left, rgba(19,122,197,0.7) 0%, rgba(255,255,255,0) 100%), url('background-default.jpg');">
-              <div class="content-text">
-                <span class="reptitle" id="reptitle">Main Title</span>
-                <br>
-                <span class="dashtitle" id="dashtitle">Subtitle</span>
-              </div>
-            </div>
-            <img src="logo.png" id="canvasLogo" class="bclogo-float" height="200">
-            <div class="grad-float"
-              style="width:1920px; height:1080px; background: radial-gradient(circle at left, rgba(22,80,137,0.8) 0%, rgba(0,0,0,0) 50%, rgba(0, 0, 0,0) 100%); mix-blend-mode: normal;">
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Controls Column -->
-      <div class="col-lg-4 col-xl-3">
-        <div class="card p-3">
-          <div class="card-body">
-            <h5 class="card-title">Create Your Thumbnail</h5>
-
-            <!-- Step 1: Background -->
-            <div class="step-section mb-4">
-              <h6 class="step-title">
-                <span class="badge bg-primary me-2">1</span>
-                Choose Background
-              </h6>
-              <div class="d-grid gap-2">
-                <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#backgroundSelect">
-                  <img src="assets/image-blue.svg" alt height="24"> Select Background
-                </button>
-                <!-- <input id="files" type="file" class="form-control" accept="image/*">
-                <div class="input-group">
-                  <input type="text" class="form-control" placeholder="YouTube URL" id="ytURLImport">
-                  <button class="btn btn-outline-primary" onclick="youtubeUrlParser(document.getElementById('ytURLImport').value)">
-                    Import
-                  </button> -->
-                </div>
-              </div>
-            </div>
-
-            <!-- Step 2: Text -->
-            <div class="step-section mb-4">
-              <h6 class="step-title">
-                <span class="badge bg-primary me-2">2</span>
-                Add Text
-              </h6>
-              <div class="mb-3">
-                <label for="mainTitleSelect" class="form-label">Main Title</label>
-                <input id="mainTitleSelect" class="form-control" placeholder="Main Title" oninput="replaceText()">
-              </div>
-              <div class="mb-3">
-                <label for="subTitleSelect" class="form-label">Subtitle</label>
-                <input id="subTitleSelect" class="form-control" placeholder="Subtitle" oninput="replaceText()">
-              </div>
-            </div>
-
-            <!-- Step 3: Logo -->
-            <div class="step-section">
-              <h6 class="step-title">
-                <span class="badge bg-primary me-2">3</span>
-                Logo Options
-              </h6>
-              <div class="form-check form-switch">
-                <input class="form-check-input" type="checkbox" id="mainLogoCheckbox" onclick="showLogo()" checked>
-                <label class="form-check-label" for="mainLogoCheckbox">Show Logo</label>
-              </div>
-            </div>
-
-            <!-- Save Button -->
-            <div class="d-grid gap-2 mt-4">
-              <button class="btn btn-primary btn-lg" id="download-page-as-image">
-                <img src="assets/download-white.svg" alt height="24"> Save Thumbnail
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
 
   <br>
@@ -238,38 +174,126 @@
 
 
   <!-- Background Modal -->
-  <div class="modal fade" id="backgroundSelect" tabindex="-1" aria-labelledby="backgroundSelectLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
+  <div class="modal fade" id="backgroundSelect" tabindex="-1" aria-labelledby="backgroundSelectLabel" 
+       aria-hidden="true" role="dialog">
+    <div class="modal-dialog modal-fullscreen-sm-down modal-lg">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="backgroundSelectLabel">Select Background</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <h2 class="modal-title" id="backgroundSelectLabel">Select Background</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" 
+                  aria-label="Close background selection"></button>
         </div>
         <div class="modal-body">
-          <h4 style="font-family: 'Poppins', sans-serif; font-size: 16px">Premade Backgrounds</h4>
-          <div id="bgSelectorImages">
+          <div id="bgSelectorImages" role="grid" aria-label="Background image options">
             <!-- Background images will be dynamically loaded here -->
           </div>
-          <br><br>
-          <h4 style="font-family: 'Poppins', sans-serif; font-size: 16px">Using a custom background?</h4>
-          <input id="files" type="file" class="btn btn-outline-primary">
-
-          <br><br><br>
-          <h4 style="font-family: 'Poppins', sans-serif; font-size: 16px">Existing YouTube Thumbnail</h4>
-          <input placeholder="YouTube Video URL" class="form-control" id="ytURLImport"><button type="button"
-            class="btn btn-outline-primary mt-1" data-bs-dismiss="modal"
-            onclick="youtubeUrlParser(document.getElementById('ytURLImport').value)">Import from YouTube</button>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
   </div>
 
 
-  </div>
+  <main id="main-content" role="main">
+    <div class="container-fluid">
+      <div class="row g-4">
+        <!-- Controls Column - will appear first on mobile -->
+        <div class="col-lg-4 col-xl-3 order-1 order-lg-2">
+          <div class="card">
+            <div class="card-body">
+              <h1 class="card-title mb-4">Create Your Thumbnail</h1>
+
+                <!-- Step 1: Background -->
+                <section class="step-section mb-4" aria-labelledby="step1-heading">
+                  <h2 class="step-title" id="step1-heading">
+                    <span class="badge bg-primary me-2" aria-hidden="true">1</span>
+                    Choose Background
+                  </h2>
+                  <div class="d-grid gap-2">
+                    <button class="btn btn-outline-primary" data-bs-toggle="modal" 
+                            data-bs-target="#backgroundSelect" aria-describedby="bg-help">
+                      <img src="assets/image-blue.svg" alt="" height="24" aria-hidden="true"> 
+                      Select Background
+                    </button>
+                    <div id="bg-help" class="sr-only">Opens background selection modal</div>
+                    <input id="files" type="file" class="form-control" accept="image/*" 
+                           aria-describedby="file-help">
+                    <div id="file-help" class="form-text">Upload your own background image</div>
+                    <div class="input-group">
+                      <input type="url" class="form-control" placeholder="YouTube URL" 
+                             id="ytURLImport" aria-describedby="url-help">
+                      <button class="btn btn-outline-primary" 
+                              onclick="youtubeUrlParser(document.getElementById('ytURLImport').value)"
+                              aria-describedby="url-help">
+                        Import
+                      </button>
+                    </div>
+                    <div id="url-help" class="form-text">Import background from YouTube video thumbnail</div>
+                  </div>
+                </section>
+
+                <!-- Step 2: Text -->
+                <section class="step-section mb-4" aria-labelledby="step2-heading">
+                  <h2 class="step-title" id="step2-heading">
+                    <span class="badge bg-primary me-2" aria-hidden="true">2</span>
+                    Add Text
+                  </h2>
+                  <div class="mb-3">
+                    <label for="mainTitleSelect" class="form-label">Main Title</label>
+                    <input id="mainTitleSelect" class="form-control" placeholder="Main Title" 
+                           oninput="replaceText()" aria-describedby="title-help" required>
+                    <div id="title-help" class="form-text">Enter the main title for your thumbnail</div>
+                  </div>
+                  <div class="mb-3">
+                    <label for="subTitleSelect" class="form-label">Subtitle</label>
+                    <input id="subTitleSelect" class="form-control" placeholder="Subtitle" 
+                           oninput="replaceText()" aria-describedby="subtitle-help">
+                    <div id="subtitle-help" class="form-text">Enter an optional subtitle</div>
+                  </div>
+                </section>
+
+                <!-- Save Button -->
+                <div class="d-grid gap-2 mt-4">
+                  <button class="btn btn-primary btn-lg" id="download-page-as-image" 
+                          aria-describedby="save-help">
+                    <img src="assets/download-white.svg" alt="" height="24" aria-hidden="true"> 
+                    Save Thumbnail
+                  </button>
+                  <div id="save-help" class="form-text">Download thumbnail as JPG image</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview Column - will appear first on small screens -->
+          <div class="col-lg-8 col-xl-9 order-2 order-lg-1">
+            <section id="previewarea" class="previewarea" aria-labelledby="preview-heading">
+              <h2 id="preview-heading" class="preview-header mb-3">
+                Preview
+              </h2>
+              <div class="preview-container">
+                <div id="content" class="smallscale" role="img" aria-label="Thumbnail preview">
+                  <div id="afterthis"></div>
+                  <div id="content-container"
+                    style="background: radial-gradient(circle at left, rgba(19,122,197,0.7) 0%, rgba(255,255,255,0) 50%), url('background-default.jpg');">
+                    <div class="content-text">
+                      <span class="reptitle" id="reptitle">Main Title</span>
+                      <br>
+                      <span class="dashtitle" id="dashtitle">Subtitle</span>
+                    </div>
+                  </div>
+                  <img src="logo.png" id="canvasLogo" class="bclogo-float" height="200">
+                  <div class="grad-float"
+                    style="width:1920px; height:1080px; background: radial-gradient(circle at left, rgba(22,80,137,0.8) 0%, rgba(0,0,0,0) 25%, rgba(0, 0, 0,0) 50%);">
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
 
   <script src="scripts/script.js"></script>
 

@@ -6,6 +6,8 @@ setUpDownloadPageAsImage();
 
 function setUpDownloadPageAsImage() {
   document.getElementById("download-page-as-image").addEventListener("click", function() {
+    announceToScreenReader("Generating thumbnail, please wait...");
+    
     const content = document.getElementById("content");
     const saveOverlay = document.getElementById("saveOverlay");
     
@@ -43,10 +45,14 @@ function setUpDownloadPageAsImage() {
       
       // Hide loading overlay
       saveOverlay.style.display = 'none';
+      
+      announceToScreenReader("Thumbnail generated successfully, download starting");
+      
     }).catch(function(error) {
       console.error('Error generating thumbnail:', error);
       saveOverlay.style.display = 'none';
-      alert('There was an error generating your thumbnail. Please try again.');
+      content.classList.add("smallscale");
+      handleAccessibleError('There was an error generating your thumbnail. Please try again.');
     });
   });
 }
@@ -78,12 +84,25 @@ function showLogo() {
     const logo = document.getElementById('canvasLogo');
     const checkbox = document.getElementById('mainLogoCheckbox');
     
+    console.log('showLogo called', { logo, checkbox, checked: checkbox?.checked });
+    
+    if (!logo || !checkbox) {
+        console.error('Logo or checkbox element not found');
+        return;
+    }
+    
     if (checkbox.checked) {
-        logo.style.display = 'block';
+        logo.style.setProperty('display', 'block', 'important');
+        logo.style.setProperty('visibility', 'visible', 'important');
+        logo.style.setProperty('opacity', '1', 'important');
         Cookies.set('logoVisible', 'true', { expires: 7 });
+        console.log('Logo should be visible now');
     } else {
-        logo.style.display = 'none';
+        logo.style.setProperty('display', 'none', 'important');
+        logo.style.setProperty('visibility', 'hidden', 'important');
+        logo.style.setProperty('opacity', '0', 'important');
         Cookies.set('logoVisible', 'false', { expires: 7 });
+        console.log('Logo should be hidden now');
     }
 }
 
@@ -91,6 +110,13 @@ function checkLogoCookie() {
     const logoVisible = Cookies.get('logoVisible');
     const checkbox = document.getElementById('mainLogoCheckbox');
     const logo = document.getElementById('canvasLogo');
+    
+    console.log('checkLogoCookie called', { logoVisible, checkbox, logo });
+    
+    if (!checkbox || !logo) {
+        console.error('Checkbox or logo element not found in checkLogoCookie');
+        return;
+    }
     
     if (logoVisible === 'false') {
         checkbox.checked = false;
@@ -135,7 +161,7 @@ function youtubeUrlParser(url) {
 
 
 
-$("input").change(function (e) {
+$("input[type='file']").change(function (e) {
 
   for (var i = 0; i < e.originalEvent.srcElement.files.length; i++) {
 
@@ -155,7 +181,27 @@ $("input").change(function (e) {
 
 var img = $("#content-container");
 function bgImageSwap(image) {
-  img.attr("style", "background: url('" + image + "') no-repeat top center");
+  console.log('bgImageSwap called with:', image);
+  
+  // Store the new background image - just update the background property through updateGradientColor
+  // Don't set backgroundImage directly as it conflicts with gradients
+  
+  // Store the image URL for the gradient function to use
+  const container = document.getElementById('content-container');
+  if (container) {
+    // Set a data attribute to store the current background image
+    container.setAttribute('data-bg-image', image);
+    
+    // Reapply the current gradient settings which will include the new background
+    const colorPicker = document.getElementById('themeColorPicker');
+    const gradientToggle = document.getElementById('showGradientToggle');
+    if (colorPicker && gradientToggle) {
+      console.log('Reapplying gradient with new background:', colorPicker.value, gradientToggle.checked);
+      updateGradientColor(colorPicker.value, gradientToggle.checked);
+    }
+  } else {
+    console.error('Container not found!');
+  }
 }
 
 function initializeThemeColor() {
@@ -186,7 +232,20 @@ function initializeThemeColor() {
 function updateGradientColor(color, showGradient) {
     const container = document.getElementById('content-container');
     const gradientOverlay = document.querySelector('.grad-float');
-    const currentBg = container.style.backgroundImage.split('url(')[1].split(')')[0];
+    
+    // Get current background image from data attribute or style
+    let currentBg = '';
+    const storedBg = container.getAttribute('data-bg-image');
+    if (storedBg) {
+        currentBg = `url('${storedBg}')`;
+    } else {
+        const bgImage = container.style.backgroundImage;
+        if (bgImage && bgImage !== 'none' && bgImage.includes('url(')) {
+            currentBg = bgImage;
+        } else {
+            currentBg = 'url("background-default.jpg")';
+        }
+    }
     
     // Convert hex to rgba
     const r = parseInt(color.substr(1,2), 16);
@@ -194,18 +253,67 @@ function updateGradientColor(color, showGradient) {
     const b = parseInt(color.substr(5,2), 16);
     
     if (showGradient) {
-        container.style.background = `radial-gradient(circle at left, rgba(${r},${g},${b},0.7) 0%, rgba(255,255,255,0) 100%), url(${currentBg})`;
-        gradientOverlay.style.background = `radial-gradient(circle at left, rgba(${Math.floor(r*0.7)},${Math.floor(g*0.7)},${Math.floor(b*0.7)},0.8) 0%, rgba(0,0,0,0) 50%, rgba(0, 0, 0,0) 100%)`;
+        // Use container gradient for the background + gradient combo - limit to half width
+        container.style.background = `radial-gradient(circle at left, rgba(${r},${g},${b},0.7) 0%, rgba(255,255,255,0) 50%), ${currentBg}`;
+        // Also use overlay gradient for additional depth - limit to half width
+        if (gradientOverlay) {
+            gradientOverlay.style.background = `radial-gradient(circle at left, rgba(${Math.floor(r*0.7)},${Math.floor(g*0.7)},${Math.floor(b*0.7)},0.8) 0%, rgba(0,0,0,0) 25%, rgba(0, 0, 0,0) 50%)`;
+        }
     } else {
-        container.style.background = `url(${currentBg})`;
-        gradientOverlay.style.background = 'none';
+        // Clear both gradients when disabled
+        container.style.background = currentBg;
+        if (gradientOverlay) {
+            gradientOverlay.style.background = 'none';
+        }
     }
+    
+    // Ensure background properties are maintained
+    container.style.backgroundRepeat = 'no-repeat';
+    container.style.backgroundPosition = 'top center';
+    container.style.backgroundSize = 'cover';
+}
+
+// Accessibility functions
+function announceToScreenReader(message) {
+  const announcement = document.createElement('div');
+  announcement.setAttribute('aria-live', 'polite');
+  announcement.setAttribute('aria-atomic', 'true');
+  announcement.className = 'sr-only';
+  announcement.textContent = message;
+  document.body.appendChild(announcement);
+  
+  setTimeout(() => {
+    if (document.body.contains(announcement)) {
+      document.body.removeChild(announcement);
+    }
+  }, 1000);
+}
+
+// Keyboard navigation support
+document.addEventListener('keydown', function(e) {
+  // ESC key closes modals
+  if (e.key === 'Escape') {
+    const openModal = document.querySelector('.modal.show');
+    if (openModal) {
+      const modal = bootstrap.Modal.getInstance(openModal);
+      if (modal) {
+        modal.hide();
+      }
+    }
+  }
+});
+
+// Enhanced error handling with announcements
+function handleAccessibleError(message) {
+  announceToScreenReader(message);
+  console.error(message);
 }
 
 // Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     initializeThemeColor();
-    // ...existing code...
+    // Ensure logo functionality works on page load
+    setTimeout(checkLogoCookie, 100);
 });
 
 

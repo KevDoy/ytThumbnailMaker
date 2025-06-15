@@ -2,17 +2,29 @@ body {
   width: 100%;
 }
 
-
 .previewarea {
   min-width: auto;
   max-width: 100%;
   width: 100%;
-  height: 545px;
+  height: auto;
+  margin: 85px 0 0 0;
   padding: 20px;
   overflow: visible;
-  background: #f8f9fa;
-  border: 1px solid #dee2e6;
-  border-radius: .375rem;
+  background: transparent;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.preview-header {
+  color: #212529;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 20px;
+  background: transparent;
+  border: none;
+  padding: 0;
 }
 
 #content {
@@ -23,9 +35,9 @@ body {
   position: relative;
   z-index: 10;
   overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
 }
-
-
 
 .content-text {
   position: absolute;
@@ -131,7 +143,7 @@ table tr td {
 
 .smallscale {
   transform: scale(0.3);
-  transform-origin: top left;
+  transform-origin: center top;
   margin-left: 0;
   margin-top: 0;
 }
@@ -139,52 +151,45 @@ table tr td {
 @media (min-width: 1400px) {
   .smallscale {
     transform: scale(0.35);
+    transform-origin: center top;
   }
 }
 
 @media (min-width: 1600px) {
   .smallscale {
     transform: scale(0.4);
+    transform-origin: center top;
   }
 }
 
-.exportScale {
-  transform: scale(0.8);
-  margin-left: -650px;
-  margin-top: -380px;
+/* Mobile styles */
+@media (max-width: 991px) {
+  .previewarea {
+    max-height: 50vh;
+    overflow: hidden;
+    margin-top: 20px;
+  }
   
+  .smallscale {
+    transform: scale(0.2);
+    transform-origin: center top;
+  }
+  
+  #content {
+    margin: 0 auto;
+  }
 }
 
-.bclogo-float {
-  position: absolute;
-  z-index: 10;
-  bottom: 0;
-  margin: 20px 30px;;
+@media (max-width: 576px) {
+  .previewarea {
+    max-height: 40vh;
+  }
+  
+  .smallscale {
+    transform: scale(0.15);
+    transform-origin: center top;
+  }
 }
-
-
-.grad-float {
-  position: absolute;
-  z-index: 9;
-  bottom: 0;
-}
-
-#bgSelectorImages img {
-  opacity: 0.8;
-  z-index: 1;
-  height: 85px;
-  cursor: pointer;
-}
-
-#bgSelectorImages img:hover {
-  opacity: 1;
-}
-
-.navbar-toggler-icon {
-  background-image: url('../assets/settingsicon.svg');
-
-}
-
 
 .loading-overlay {
     position: fixed;
@@ -208,4 +213,43 @@ table tr td {
     height: 38px;
     padding: 3px;
     border-radius: 4px;
+}
+
+/* Background modal styling */
+#bgSelectorImages {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 15px;
+  padding: 20px;
+}
+
+#bgSelectorImages img {
+  width: 100%;
+  height: 84px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  border: 2px solid transparent;
+}
+
+#bgSelectorImages img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+  border-color: #007bff;
+}
+
+#bgSelectorImages img:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+  transform: scale(1.05);
+}
+
+/* Logo styling */
+.bclogo-float {
+  position: absolute;
+  z-index: 10;
+  bottom: 0;
+  margin: 20px 30px;
+  display: block;
 }
