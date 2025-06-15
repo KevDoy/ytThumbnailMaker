@@ -2,6 +2,7 @@ function loadBackgroundImages() {
     const container = document.getElementById('bgSelectorImages');
     const loadingOverlay = document.getElementById('loadingOverlay');
     const randomizeToggle = document.getElementById('randomizeToggle');
+    let currentImage = 1;
     let loadedImages = [];
     
     // Get current randomize setting from cookie
@@ -31,17 +32,32 @@ function loadBackgroundImages() {
         
         // Add images back to container
         loadedImages.forEach(img => container.appendChild(img));
+        
+        // Announce change to screen readers
+        if (typeof announceToScreenReader === 'function') {
+            announceToScreenReader(this.checked ? 'Background images randomized' : 'Background images sorted sequentially');
+        }
     });
     
     function tryLoadImage(index) {
         const img = document.createElement('img');
         img.src = `backgrounds/${index}.jpg`;
         img.dataset.index = index; // Store original order
+        img.alt = `Background option ${index}`;
+        img.role = 'button';
+        img.tabIndex = 0;
+        img.setAttribute('aria-label', `Select background image ${index}`);
         
         img.onload = function() {
             loadedImages.push(img);
             img.onclick = function() {
                 bgImageSwap(`backgrounds/${index}.jpg`);
+            };
+            img.onkeydown = function(e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    bgImageSwap(`backgrounds/${index}.jpg`);
+                }
             };
             img.setAttribute('data-bs-dismiss', 'modal');
             tryLoadImage(index + 1);
@@ -49,6 +65,8 @@ function loadBackgroundImages() {
         
         img.onerror = function() {
             if (loadedImages.length > 0) {
+                console.log(`Found ${loadedImages.length} background images`);
+                
                 if (shouldRandomize) {
                     for (let i = loadedImages.length - 1; i > 0; i--) {
                         const j = Math.floor(Math.random() * (i + 1));
@@ -58,10 +76,16 @@ function loadBackgroundImages() {
                 
                 loadedImages.forEach(img => container.appendChild(img));
                 loadingOverlay.style.display = 'none';
+                
+                // Announce completion to screen readers
+                if (typeof announceToScreenReader === 'function') {
+                    announceToScreenReader(`${loadedImages.length} background images loaded`);
+                }
             }
         };
     }
     
+    // Start loading images
     tryLoadImage(1);
 }
 
