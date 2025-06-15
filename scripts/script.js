@@ -17,6 +17,10 @@ function setUpDownloadPageAsImage() {
     // Temporarily remove scaling but maintain position
     content.classList.remove("smallscale");
     
+    // Temporarily remove rounded corners for export
+    const originalBorderRadius = content.style.borderRadius;
+    content.style.borderRadius = '0';
+    
     html2canvas(content, {
       width: 1920,
       height: 1080,
@@ -28,6 +32,7 @@ function setUpDownloadPageAsImage() {
         clonedContent.style.transform = 'none';
         clonedContent.style.width = '1920px';
         clonedContent.style.height = '1080px';
+        clonedContent.style.borderRadius = '0';
       }
     }).then(function(canvas) {
       // Force the canvas to be 1920x1080
@@ -40,8 +45,9 @@ function setUpDownloadPageAsImage() {
       // Changed to JPG with 0.9 quality for file size optimization
       simulateDownloadImageClick(finalCanvas.toDataURL('image/jpeg', 0.9), 'YtThumbnail.jpg');
       
-      // Restore original scale
+      // Restore original scale and rounded corners
       content.classList.add("smallscale");
+      content.style.borderRadius = originalBorderRadius;
       
       // Hide loading overlay
       saveOverlay.style.display = 'none';
@@ -52,6 +58,7 @@ function setUpDownloadPageAsImage() {
       console.error('Error generating thumbnail:', error);
       saveOverlay.style.display = 'none';
       content.classList.add("smallscale");
+      content.style.borderRadius = originalBorderRadius;
       handleAccessibleError('There was an error generating your thumbnail. Please try again.');
     });
   });
